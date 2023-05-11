@@ -6,48 +6,70 @@ using std::cin;
 
 
 void search_for_claw(int** graph_array, int num_of_tops) {
-    int neighb_counter = 0;
     bool claw = false;
     for (int i = 0; i < num_of_tops; i++) {
+        int neighb_counter = 0;
+
         for (int j = 0; j < num_of_tops; j++) {
             if (graph_array[i][j] == 1) {
-				neighb_counter++;
-			}
-	    }
-        if (neighb_counter > 2) {
-           int solo_counter = 0;
-            for (int k = 0; k < num_of_tops; k++) {
-                
-                if (graph_array[i][k] == 1) {
-                    int neighb_counter2 = 0;
-                    for (int z = 0; z < num_of_tops; z++) {
-                        
-                        if (graph_array[k][z] == 1) {
-                            neighb_counter2++;
+                neighb_counter++;
+            }   
+        }
+       
+        
+        
+        if (neighb_counter > 2) {   
+            int couter = 0;
+            int* neighb_tab = new int[neighb_counter];
+            for (int j = 0; j < num_of_tops; j++) {
+                if (graph_array[i][j] == 1) {
+                    neighb_tab[couter] = j;
+                    couter++;
+                }
+            }
+
+
+
+            for (int x = 0; x < neighb_counter; x++) {
+               
+                for (int y = 0; y < neighb_counter; y++) {
+                    
+                    for (int z = 0; z < neighb_counter; z++) {
+                        if (x != y && x != z && y != z) {
+                            if (graph_array[neighb_tab[x]][neighb_tab[z]] == 0 && graph_array[neighb_tab[x]][neighb_tab[y]] == 0 && graph_array[neighb_tab[y]][neighb_tab[z]] == 0) {
+                                claw = true;
+                                break;
+                            }
+
                         }
                     }
-
-                    if (neighb_counter2 <= 1) {
-						claw = true;
+                    if (claw) {
+                        break;
                     }
-
-
+                
                 }
-               
-
-            }
-            if (claw) {
-                cout << "0" << endl;
-                return;
+                if (claw) {
+                    break;
+                }
+            
             }
 
+            delete[] neighb_tab;
+            if (claw)
+                break;
 
+            
         }
-        neighb_counter = 0;
-   }
-    cout << "1" << endl;
-    
+    }
 
+    if (claw) {
+        cout << "0" << endl;
+        return;
+    }
+    else {
+        cout << "1" << endl;
+        return;
+    }
 
 }
 
@@ -68,13 +90,13 @@ int main() {
         int counter = 0;
         cin >> num_of_tops;
         cin >> numbers;
-        
+
         int** graph_array = new int* [num_of_tops];
         for (int j = 0; j < num_of_tops; j++) {
             graph_array[j] = new int[num_of_tops];
         }
 
-       
+
 
 
         for (int k = 0; k < num_of_tops; k++) {
@@ -84,12 +106,7 @@ int main() {
             }
         }
 
-        for (int k = 0; k < num_of_tops; k++) {
-            for (int l = 0; l < num_of_tops; l++) {
-                cout << graph_array[k][l] << " ";
-            }
-            cout << endl;
-        }
+       
 
         search_for_claw(graph_array, num_of_tops);
 
@@ -101,4 +118,4 @@ int main() {
     }
 
 
-}
+}   
